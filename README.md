@@ -1,10 +1,23 @@
-# Full-Stack Series
+# Full-Stack Application
 
-![full stack mern app](https://user-images.githubusercontent.com/70439799/218651720-d3090266-615e-493a-be9f-0e612620c04a.gif)
+## How to run locally the application
 
-- Part 1 - [Let's build and deploy a full stack MERN web application](https://blog.itsrakesh.co/lets-build-and-deploy-a-full-stack-mern-web-application)
-- Part 2 - [Adding Authentication to full stack MERN web application](https://blog.itsrakesh.co/adding-authentication-to-full-stack-mern-web-application)
-- Part 3 - [How to write tests in full-stack MERN web application](https://blog.itsrakesh.co/how-to-write-tests-in-full-stack-mern-web-application)
-- Part 4 - [Dockerizing Your MERN Stack App: A Step-by-Step Guide](https://blog.itsrakesh.co/dockerizing-your-mern-stack-app-a-step-by-step-guide)
-- Part 5 - [Automate MERN App Deployment with GitHub Actions CI/CD](https://blog.itsrakesh.co/automate-mern-app-deployment-with-github-actions-cicd)
-- Part 6 - [Deploying a MERN App to AWS Elastic Beanstalk with CI/CD](https://blog.itsrakesh.co/deploying-a-mern-app-to-aws-elastic-beanstalk-with-cicd)
+Create a .env file at the root level and copy paste the following var :
+MONGODB_URI=mongodb+srv://pierre:BNseqaMqKxkV9j6G@cluster0.hfwbzzm.mongodb.net/?retryWrites=true&w=majority
+TOKEN_KEY=ThisIsMySecretKey
+EMAIL=pierre.bonnet.19@efrei.net
+PASSWORD=12345
+
+Go to the server folder and enter the following command :
+
+```
+npm i
+npm run start
+```
+
+Go to the client folder and enter the following command :
+
+```
+npm i
+npm run start
+```
