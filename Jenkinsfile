@@ -1,10 +1,8 @@
 pipeline {
-    
     agent { 
     label 'docker-slave' 
     
 }
-    
     environment {
     	MONGODB_URI = credentials('mongodb-uri')
     	TOKEN_KEY = credentials('token-key')
