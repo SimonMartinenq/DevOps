@@ -19,6 +19,7 @@ pipeline {
   }
 
   environment {
+	PATH = "/usr/bin/docker"
     MONGODB_URI = credentials('mongodb-uri')
     TOKEN_KEY = credentials('token-key')
     EMAIL = credentials('email')
