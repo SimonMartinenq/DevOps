@@ -51,25 +51,29 @@ pipeline {
     stage('Build client app docker image') {
       steps {
         dir('client') {
-          def buildArgs = "'-f Dockerfile .'"
-          docker.build(
-            "${params.Image_Name}:${params.Image_Tag}",
-            buildArgs)
-        }
+			script {
+				def buildArgs = "'-f Dockerfile .'"
+				docker.build(
+					"${params.Image_Name}:${params.Image_Tag}",
+					buildArgs)
+				}
+		}
       }
     }
 
     stage('Push client app docker image to dockerhub') {
       steps {
         dir('client') {
-          def localImage = "${params.Image_Name}:${params.Image_Tag}"
-          def repositoryName = "pierre15602/${localImage}"
+			script {
+				def localImage = "${params.Image_Name}:${params.Image_Tag}"
+				def repositoryName = "pierre15602/${localImage}"
 
-          sh "docker tag ${localImage} ${repositoryName} "
-          docker.withRegistry("", "DockerHubCredentials") {
-            def image = docker.image("${repositoryName}");
-            image.push()
-          }
+				sh "docker tag ${localImage} ${repositoryName} "
+				docker.withRegistry("", "DockerHubCredentials") {
+					def image = docker.image("${repositoryName}");
+					image.push()
+				}
+			}
         }
       }
     }
