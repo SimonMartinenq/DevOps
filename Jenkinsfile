@@ -3,6 +3,21 @@ pipeline {
     label 'docker-slave' 
     
 }
+	parameters {
+      string(
+         name: "Branch_Name", 
+         defaultValue: 'master', 
+         description: '')
+         string(
+            name: "Image_Name", 
+            defaultValue: 'clientapp', 
+            description: '')
+         string(
+            name: "Image_Tag", 
+            defaultValue: 'latest', 
+            description: 'Image tag')
+    }
+
     environment {
     	MONGODB_URI = credentials('mongodb-uri')
     	TOKEN_KEY = credentials('token-key')
@@ -32,5 +47,33 @@ pipeline {
         		}
         	}
         }
+
+		stage('Build client app docker image'){
+			steps{
+				dir('client'){
+					def buildArgs = """\
+
+-f Dockerfile \
+."""
+				docker.build(
+                   "${params.Image_Name}:${params.Image_Tag}",
+                   buildArgs)
+				}
+			}
+		}
+
+		stage('Push client app docker image to dockerhub'){
+			steps{
+				dir('client'){
+					def localImage = "${params.Image_Name}:${params.Image_Tag}"
+					def repositoryName = "pierre15602/${localImage}"
+				
+					sh "docker tag ${localImage} ${repositoryName} "
+					docker.withRegistry("", "DockerHubCredentials") {
+					def image = docker.image("${repositoryName}");
+					image.push()
+							}
+			}
+		}
     }
 }
