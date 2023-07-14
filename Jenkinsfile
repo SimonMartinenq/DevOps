@@ -59,7 +59,6 @@ pipeline {
 		}
       }
     }
-
     stage('Push client app docker image to dockerhub') {
       steps {
         dir('client') {
