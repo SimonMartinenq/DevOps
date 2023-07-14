@@ -52,10 +52,9 @@ pipeline {
       steps {
         dir('client') {
 			script {
-				def buildArgs = "'-f Dockerfile .'"
+				// def buildArgs = "."
 				docker.build(
-					"${params.Image_Name}:${params.Image_Tag}",
-					buildArgs)
+					"${params.Image_Name}:${params.Image_Tag}")
 				}
 		}
       }
