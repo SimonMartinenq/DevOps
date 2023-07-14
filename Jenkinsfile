@@ -54,7 +54,7 @@ pipeline {
 			script {
 				// def buildArgs = "."
 				docker.build(
-					"${params.Image_Name}:${params.Image_Tag}")
+					"${params.Image_Name}:${env.BUILD_NUMBER}")
 				}
 		}
       }
