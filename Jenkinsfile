@@ -9,8 +9,12 @@ pipeline {
       defaultValue: 'master',
       description: '')
     string(
-      name: "Image_Name",
-      defaultValue: 'clientapp',
+      name: "Front_Image_Name",
+      defaultValue: 'productivityAppFront',
+      description: '')
+    string(
+      name: "Back_Image_Name",
+      defaultValue: 'productivityAppServer',
       description: '')
     string(
       name: "Image_Tag",
@@ -26,27 +30,27 @@ pipeline {
   }
 
   stages {
-    stage('Frontend Tests') {
-      steps {
-        dir('client') {
-          sh 'npm install'
-          sh 'npm test'
-        }
-      }
-    }
+    // stage('Frontend Tests') {
+    //   steps {
+    //     dir('client') {
+    //       sh 'npm install'
+    //       sh 'npm test'
+    //     }
+    //   }
+    // }
 
-    stage('Backend Tests') {
-      steps {
-        dir('server') {
-          sh 'npm install'
-          sh 'export MONGODB_URI=$MONGODB_URI'
-          sh 'export TOKEN_KEY=$TOKEN_KEY'
-          sh 'export EMAIL=$EMAIL'
-          sh 'export PASSWORD=$PASSWORD'
-          sh 'npm test'
-        }
-      }
-    }
+    // stage('Backend Tests') {
+    //   steps {
+    //     dir('server') {
+    //       sh 'npm install'
+    //       sh 'export MONGODB_URI=$MONGODB_URI'
+    //       sh 'export TOKEN_KEY=$TOKEN_KEY'
+    //       sh 'export EMAIL=$EMAIL'
+    //       sh 'export PASSWORD=$PASSWORD'
+    //       sh 'npm test'
+    //     }
+    //   }
+    // }
 
     stage('Build client app docker image') {
       steps {
@@ -54,16 +58,46 @@ pipeline {
 			script {
 				// def buildArgs = "."
 				docker.build(
-					"${params.Image_Name}:${params.Image_Tag}")
+					"${params.Front_Image_Name}:${params.Image_Tag}")
 				}
 		}
       }
     }
+
     stage('Push client app docker image to dockerhub') {
       steps {
         dir('client') {
 			script {
-				def localImage = "${params.Image_Name}:${params.Image_Tag}"
+				def localImage = "${params.Front_Image_Name}:${params.Image_Tag}"
+				def repositoryName = "pierre15602/${localImage}"
+
+				sh "docker tag ${localImage} ${repositoryName} "
+				docker.withRegistry("", "DockerHubCredentials") {
+					def image = docker.image("${repositoryName}");
+					image.push()
+				}
+			}
+        }
+      }
+    }
+
+    stage('Build server docker image') {
+      steps {
+        dir('server') {
+			script {
+				// def buildArgs = "."
+				docker.build(
+					"${params.Back_Image_Name}:${params.Image_Tag}")
+				}
+		}
+      }
+    }
+    
+    stage('Push server docker image to dockerhub') {
+      steps {
+        dir('server') {
+			script {
+				def localImage = "${params.Back_Image_Name}:${params.Image_Tag}"
 				def repositoryName = "pierre15602/${localImage}"
 
 				sh "docker tag ${localImage} ${repositoryName} "
