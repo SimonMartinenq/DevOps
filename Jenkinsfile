@@ -56,9 +56,9 @@ pipeline {
       steps {
         dir('client') {
 			script {
-				// def buildArgs = "."
+				def buildArgs = "-build-arg='REACT_APP_BACKEND_URL=http://localhost:5000/api'"
 				docker.build(
-					"${params.Front_Image_Name}:${params.Image_Tag}")
+					"${params.Front_Image_Name}:${params.Image_Tag}", buildArgs)
 				}
 		}
       }
@@ -85,9 +85,9 @@ pipeline {
       steps {
         dir('server') {
 			script {
-				// def buildArgs = "."
+				def buildArgs = "-build-arg='MONGODB_URI=${MONGODB_URI} TOKEN_KEY=${TOKEN_KEY} EMAIL=${EMAIL} PASSWORD=${PASSWORD}'"
 				docker.build(
-					"${params.Back_Image_Name}:${params.Image_Tag}")
+					"${params.Back_Image_Name}:${params.Image_Tag}", buildArgs)
 				}
 		}
       }
