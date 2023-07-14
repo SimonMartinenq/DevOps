@@ -54,7 +54,7 @@ pipeline {
 			script {
 				// def buildArgs = "."
 				docker.build(
-					"${params.Image_Name}:${env.BUILD_NUMBER}")
+					"${params.Image_Name}:${params.Image_Tag}")
 				}
 		}
       }
@@ -63,7 +63,7 @@ pipeline {
       steps {
         dir('client') {
 			script {
-				def localImage = "${params.Image_Name}:${env.BUILD_NUMBER}"
+				def localImage = "${params.Image_Name}:${params.Image_Tag}"
 				def repositoryName = "pierre15602/${localImage}"
 
 				sh "docker tag ${localImage} ${repositoryName} "
