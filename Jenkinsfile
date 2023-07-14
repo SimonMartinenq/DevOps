@@ -10,11 +10,11 @@ pipeline {
       description: '')
     string(
       name: "Front_Image_Name",
-      defaultValue: 'productivityAppFront',
+      defaultValue: 'productivity-app-front',
       description: '')
     string(
       name: "Back_Image_Name",
-      defaultValue: 'productivityAppServer',
+      defaultValue: 'productivity-app-server',
       description: '')
     string(
       name: "Image_Tag",
