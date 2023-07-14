@@ -63,7 +63,7 @@ pipeline {
       steps {
         dir('client') {
 			script {
-				def localImage = "${params.Image_Name}:${params.Image_Tag}"
+				def localImage = "${params.Image_Name}:${env.BUILD_NUMBER}"
 				def repositoryName = "pierre15602/${localImage}"
 
 				sh "docker tag ${localImage} ${repositoryName} "
