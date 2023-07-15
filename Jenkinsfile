@@ -52,63 +52,63 @@ pipeline {
     //   }
     // }
 
-    stage('Build client app docker image') {
-      steps {
-        dir('client') {
-			script {
-				def buildArgs = '--build-arg="REACT_APP_BACKEND_URL=http://localhost:5000/api" .'
-				docker.build(
-					"${params.Front_Image_Name}:${params.Image_Tag}", buildArgs)
-				}
-		}
-      }
-    }
+    // stage('Build client app docker image') {
+    //   steps {
+    //     dir('client') {
+		// 	script {
+		// 		def buildArgs = '--build-arg="REACT_APP_BACKEND_URL=http://localhost:5000/api" .'
+		// 		docker.build(
+		// 			"${params.Front_Image_Name}:${params.Image_Tag}", buildArgs)
+		// 		}
+		// }
+    //   }
+    // }
 
-    stage('Push client app docker image to dockerhub') {
-      steps {
-        dir('client') {
-			script {
-				def localImage = "${params.Front_Image_Name}:${params.Image_Tag}"
-				def repositoryName = "pierre15602/${localImage}"
+    // stage('Push client app docker image to dockerhub') {
+    //   steps {
+    //     dir('client') {
+		// 	script {
+		// 		def localImage = "${params.Front_Image_Name}:${params.Image_Tag}"
+		// 		def repositoryName = "pierre15602/${localImage}"
 
-				sh "docker tag ${localImage} ${repositoryName} "
-				docker.withRegistry("", "DockerHubCredentials") {
-					def image = docker.image("${repositoryName}");
-					image.push()
-				}
-			}
-        }
-      }
-    }
+		// 		sh "docker tag ${localImage} ${repositoryName} "
+		// 		docker.withRegistry("", "DockerHubCredentials") {
+		// 			def image = docker.image("${repositoryName}");
+		// 			image.push()
+		// 		}
+		// 	}
+    //     }
+    //   }
+    // }
 
-    stage('Build server docker image') {
-      steps {
-        dir('server') {
-			script {
-				def buildArgs = "--build-arg='MONGODB_URI=${MONGODB_URI} TOKEN_KEY=${TOKEN_KEY} EMAIL=${EMAIL} PASSWORD=${PASSWORD} ' ."
-				docker.build(
-					"${params.Back_Image_Name}:${params.Image_Tag}", buildArgs)
-				}
-		}
-      }
-    }
+    // stage('Build server docker image') {
+    //   steps {
+    //     dir('server') {
+		// 	script {
+		// 		def buildArgs = "--build-arg='MONGODB_URI=${MONGODB_URI} TOKEN_KEY=${TOKEN_KEY} EMAIL=${EMAIL} PASSWORD=${PASSWORD} ' ."
+		// 		docker.build(
+		// 			"${params.Back_Image_Name}:${params.Image_Tag}", buildArgs)
+		// 		}
+		// }
+    //   }
+    // }
     
-    stage('Push server docker image to dockerhub') {
-      steps {
-        dir('server') {
-			script {
-				def localImage = "${params.Back_Image_Name}:${params.Image_Tag}"
-				def repositoryName = "pierre15602/${localImage}"
+    // stage('Push server docker image to dockerhub') {
+    //   steps {
+    //     dir('server') {
+		// 	script {
+		// 		def localImage = "${params.Back_Image_Name}:${params.Image_Tag}"
+		// 		def repositoryName = "pierre15602/${localImage}"
 
-				sh "docker tag ${localImage} ${repositoryName} "
-				docker.withRegistry("", "DockerHubCredentials") {
-					def image = docker.image("${repositoryName}");
-					image.push()
-				}
-			}
-        }
-      }
-    }
+		// 		sh "docker tag ${localImage} ${repositoryName} "
+		// 		docker.withRegistry("", "DockerHubCredentials") {
+		// 			def image = docker.image("${repositoryName}");
+		// 			image.push()
+		// 		}
+		// 	}
+    //     }
+    //   }
+    // }
 
     stage('Run docker compose'){
       steps{
@@ -122,7 +122,7 @@ pipeline {
                   remote.user = USER
                   remote.password =PASS
                   stage('Remote SSH') {
-                      sshPut remote: remote, from: '', into: '.'
+                      sshPut remote: remote, from: 'docker-compose.yml', into: '.'
                       sshCommand remote: remote, command: 'docker compose up', sudo:true
                   }
               }
