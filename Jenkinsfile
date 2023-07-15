@@ -109,5 +109,26 @@ pipeline {
         }
       }
     }
+
+    stage('Run docker compose'){
+      steps{
+          script{
+              def remote = [:]
+              remote.name = "node"
+              remote.host = "192.168.56.103"
+              remote.allowAnyHosts = true
+              
+              withCredentials([usernamePassword(credentialsId: '23fc545c-abf9-45ed-b083-6daddeaef0e2', usernameVariable: 'USER', passwordVariable: 'PASS')]){
+                  remote.user = USER
+                  remote.password =PASS
+                  stage('Remote SSH') {
+                      sshPut remote: remote, from: '', into: '.'
+                      sshCommand remote: remote, command: 'docker compose up', sudo:true
+                  }
+              }
+          }
+            
+      }
+  } 
   }
 }

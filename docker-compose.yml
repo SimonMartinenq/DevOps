@@ -1,29 +1,21 @@
-# The version of the docker-compose.
 version: "3.8"
-# Telling docker-compose to build the client and server images and run them in containers.
+
 services:
   client:
-    # Telling docker-compose to build the client image using the Dockerfile in the client directory.
-    build: ./client
-    # Giving the container a name.
-    container_name: clientapp_c
-    # Mapping the port 3000 on the host machine to the port 3000 on the container.
+    image: pierre15602/productivity-app-front:latest
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:5000/api
     ports:
       - "3000:3000"
-    # Mapping the client directory on the host machine to the /app directory on the container.
-    volumes:
-      - ./client:/app
-      - ./client/node_modules:/app/node_modules
-
-    # Allows you to run container in detached mode.
     stdin_open: true
     tty: true
+
   server:
-    # Telling docker-compose to build the client image using the Dockerfile in the server directory.
-    build: ./server
-    container_name: serverapp_c
+    image: pierre15602/productivity-app-server:latest
+    environment:
+      - MONGODB_URI=mongodb+srv://pierre:BNseqaMqKxkV9j6G@cluster0.hfwbzzm.mongodb.net/?retryWrites=true&w=majority
+      - TOKEN_KEY=ThisIsMySecretKey
+      - EMAIL=pierre.bonnet.19@efrei.net
+      - PASSWORD=12345
     ports:
       - "5000:5000"
-    volumes:
-      - ./server:/app
-      - ./server/node_modules:/app/node_modules
