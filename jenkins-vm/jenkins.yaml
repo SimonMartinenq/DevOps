@@ -1,0 +1,84 @@
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              id: "ssh-credentials"
+              password: "${JENKINS-ADMIN-PASSWORD:-password}"
+              scope: GLOBAL
+              username: "${JENKINS-ADMIN-ID:-jenkins}"
+          - usernamePassword:
+              id: "DockerHubCredentials"
+              password: "DockerHubPassword"
+              scope: GLOBAL
+              username: "pierre15602"
+          - string:
+              id: "mongodb-uri"
+              secret: "${MONGODB_URI:-mongodb+srv://pierre:BNseqaMqKxkV9j6G@cluster0.hfwbzzm.mongodb.net/?retryWrites=true&w=majority}"
+              scope: GLOBAL
+              description: "Mongo Db uri"
+          - string:
+              id: "token-key"
+              secret: "${TOKEN_KEY:-ThisIsMySecretKey}"
+              scope: GLOBAL
+              description: "Token Key"
+          - string:
+              id: "email"
+              secret: "${USER-EMAIL:-pierre.bonnet.19@efrei.net}"
+              scope: GLOBAL
+              description: "App user email"
+          - string:
+              id: "password"
+              secret: "${USER-PASSWORD:-12345}"
+              scope: GLOBAL
+              description: "App user password"
+
+jenkins:
+  systemMessage: Jenkins configured automatically by Jenkins Configuration as Code plugin
+  numExecutors: 5
+  scmCheckoutRetryCount: 2
+  mode: NORMAL
+  clouds:
+    - docker:
+        dockerApi:
+          connectTimeout: 60
+          dockerHost:
+            uri: "tcp://192.168.56.101:4243"
+          readTimeout: 60
+        name: "docker"
+        templates:
+          - connector:
+              ssh:
+                sshKeyStrategy:
+                  manuallyConfiguredSSHKey:
+                    credentialsId: "ssh-credentials"
+                    sshHostKeyVerificationStrategy: "nonVerifyingKeyVerificationStrategy"
+            dockerTemplateBase:
+              cpuPeriod: 0
+              cpuQuota: 0
+              image: "jenkins-slave-docker"
+            labelString: "docker-slave"
+            name: "docker-slave"
+            pullStrategy: PULL_NEVER
+            pullTimeout: 300
+            remoteFs: "/home/jenkins"
+  securityRealm:
+    local:
+      users:
+        - id: jenkins-admin
+          password: admin
+jobs:
+  - script: >
+      job('seed_job') {
+        scm {
+           git {
+             remote {
+               url('https://github.com/SimonMartinenq/DevOps.git')
+             }
+             branch('fullstack-app')
+           }
+        }
+        triggers {
+          githubPush()
+        }
+      }
