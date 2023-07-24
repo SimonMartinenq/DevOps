@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  client:
+    image: pierre15602/productivity-app-front:latest
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:5000/api
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+
+  server:
+    image: pierre15602/productivity-app-server:latest
+    environment:
+      - MONGODB_URI=mongodb+srv://pierre:BNseqaMqKxkV9j6G@cluster0.hfwbzzm.mongodb.net/?retryWrites=true&w=majority
+      - TOKEN_KEY=ThisIsMySecretKey
+      - EMAIL=pierre.bonnet.19@efrei.net
+      - PASSWORD=12345
+    ports:
+      - "5000:5000"
