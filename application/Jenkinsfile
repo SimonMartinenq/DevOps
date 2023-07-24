@@ -30,27 +30,27 @@ pipeline {
   }
 
   stages {
-    // stage('Frontend Tests') {
-    //   steps {
-    //     dir('application/client') {
-    //       sh 'npm install'
-    //       sh 'npm test'
-    //     }
-    //   }
-    // }
+    stage('Frontend Tests') {
+      steps {
+        dir('application/client') {
+          sh 'npm install'
+          sh 'npm test'
+        }
+      }
+    }
 
-    // stage('Backend Tests') {
-    //   steps {
-    //     dir('application/server') {
-    //       sh 'npm install'
-    //       sh 'export MONGODB_URI=$MONGODB_URI'
-    //       sh 'export TOKEN_KEY=$TOKEN_KEY'
-    //       sh 'export EMAIL=$EMAIL'
-    //       sh 'export PASSWORD=$PASSWORD'
-    //       sh 'npm test'
-    //     }
-    //   }
-    // }
+    stage('Backend Tests') {
+      steps {
+        dir('application/server') {
+          sh 'npm install'
+          sh 'export MONGODB_URI=$MONGODB_URI'
+          sh 'export TOKEN_KEY=$TOKEN_KEY'
+          sh 'export EMAIL=$EMAIL'
+          sh 'export PASSWORD=$PASSWORD'
+          sh 'npm test'
+        }
+      }
+    }
 
     stage('Build client app docker image') {
       steps {
